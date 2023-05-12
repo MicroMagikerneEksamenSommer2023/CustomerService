@@ -1,7 +1,14 @@
 using Newtonsoft.Json;
 using System.Text.Json;
 using CustomerService.Services;
-var builder = WebApplication.CreateBuilder(args);
+using NLog;
+using NLog.Web;
+
+var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+logger.Debug("init main");
+try
+{
+    var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
@@ -10,6 +17,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<CustomerDBService>();
+builder.Logging.ClearProviders();
+builder.Host.UseNLog();
 var app = builder.Build();
 
 
@@ -27,3 +36,13 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+}
+catch (Exception ex)
+{
+    logger.Error(ex, "Stopped program because of exception");
+    throw;
+}
+finally
+{
+NLog.LogManager.Shutdown();
+}
