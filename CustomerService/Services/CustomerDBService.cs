@@ -19,17 +19,13 @@ namespace CustomerService.Services
     {
         _logger = logger;
         _config = config;
-        // Opret en forbindelse til MongoDB-databasen - admin gøres til miljøvariabel:
-        var mongoClient = new MongoClient("mongodb://localhost:27017/");
-        //database gøres til en miljøvariabel
+     
+       /* var mongoClient = new MongoClient("mongodb://localhost:27017/");
         var database = mongoClient.GetDatabase("TEST");
-        // Opret en samling (collection) for brugere - users bliver gjort til en miljøvariabel:
-        _customers = database.GetCollection<Customer>("Customers");/*
+        _customers = database.GetCollection<Customer>("Customers");*/
             var mongoClient = new MongoClient(_config["connectionsstring"]);
-            //database gøres til en miljøvariabel
             var database = mongoClient.GetDatabase(_config["database"]);
-            // Opret en samling (collection) for brugere - users bliver gjort til en miljøvariabel:
-            _customers = database.GetCollection<Customer>(_config["collection"]);*/
+            _customers = database.GetCollection<Customer>(_config["collection"]);
     }
     public List<Customer> GetAllCustomers()
     {
