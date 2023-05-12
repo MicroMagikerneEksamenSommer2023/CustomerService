@@ -74,18 +74,24 @@ public class CustomerController : ControllerBase
 
 
     [HttpPost("createcustomer")]
-    public Customer CreateCustomer([FromBody] Customer data)
+    public async Task<Customer> CreateCustomer([FromBody] Customer data)
     {
         _logger.LogInformation("Call revieved, " + data.ToString());
-        dBService.CreateCustomer(data);
+        if(!dBService.CheckIfExists(data.Email))
+        {
+            return await dBService.CreateCustomer(data);
+        }
+        else{
+            return data;
+        }
         //dBService.CreateCustomer(data.FirstName, data.LastName, data.Gender, data.BirthDate, data.Address, data.PostalCode, data.City, data.Country, data.Telephone, data.Email, data.AccessCode);
-        return data;
+        
     }
      [HttpGet("checkcredentials")]
-    public bool CheckCredentials([FromBody]string email, string accessCode)
+    public bool CheckCredentials([FromBody]Credentials data)
     {
-        _logger.LogInformation("Call recieved, the email is " + email);
-        return dBService.CheckCredentials(email, accessCode);
+        _logger.LogInformation("Call recieved, the email is " + data.Email);
+        return dBService.CheckCredentials(data.Email, data.AccessCode);
     }
 
 

@@ -61,24 +61,34 @@ namespace CustomerService.Services
             
        
         }
-        public void CreateCustomer(Customer data)
+        public async Task<Customer> CreateCustomer(Customer data)
     {
         _logger.LogInformation("Service Ramt");
        Customer temp = data;
        temp.Id = null;
-       Customer? checker = GetCustomerByEmail(data.Email);
-       if (checker == null)
-       {
-        return;
-       }
-        _customers.InsertOneAsync(temp);
+        await _customers.InsertOneAsync(temp);
         _logger.LogInformation("Data indsat");
+        return GetCustomerByEmail(data.Email);
 
+    }
+    public bool CheckIfExists(string email)
+    {
+        var filter = Builders<Customer>.Filter.Eq(c=>c.Email, email);
+        List<Customer> checker = new List<Customer>();
+        checker = _customers.Find(filter).ToList();
+        if(checker.Count > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
     public bool CheckCredentials(string email, string password)
     {
         var filter = Builders<Customer>.Filter.Eq(c=> c.Email, email) & Builders<Customer>.Filter.Eq(c=>c.AccessCode, password);
-        Customer? temp = _customers.Find(filter).First();
+        Customer? temp = _customers.Find(filter).FirstOrDefault();
         if (temp == null)
         {
             return false;
