@@ -2,7 +2,6 @@ using CustomerService.Models;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using CustomerService.Services;
-using MongoDB.Driver;
 using MongoDB.Bson;
 using System.Runtime.CompilerServices;
 
