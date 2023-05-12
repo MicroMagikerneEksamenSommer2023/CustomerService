@@ -81,6 +81,12 @@ public class CustomerController : ControllerBase
         //dBService.CreateCustomer(data.FirstName, data.LastName, data.Gender, data.BirthDate, data.Address, data.PostalCode, data.City, data.Country, data.Telephone, data.Email, data.AccessCode);
         return data;
     }
+     [HttpGet("checkcredentials")]
+    public bool CheckCredentials([FromBody]string email, string accessCode)
+    {
+        _logger.LogInformation("Call recieved, the email is " + email);
+        return dBService.CheckCredentials(email, accessCode);
+    }
 
 
     [HttpGet("version")]

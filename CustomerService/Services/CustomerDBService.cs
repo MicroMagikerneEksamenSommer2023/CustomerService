@@ -62,13 +62,30 @@ namespace CustomerService.Services
        
         }
         public void CreateCustomer(Customer data)
-        //public void CreateCustomer(string firstname, string lastname, string gender, DateTime birthdate, string address, string postalcode, string city, string country, string telephone, string email, string accesscode)
     {
-        _logger.LogInformation("jaja");
-        //Customer temp = new Customer(firstname, lastname, gender, birthdate, address, postalcode, city, country, telephone, email, accesscode);
-        _customers.InsertOneAsync(data);
+        _logger.LogInformation("Service Ramt");
+       Customer temp = data;
+       temp.Id = null;
+       Customer? checker = GetCustomerByEmail(data.Email);
+       if (checker == null)
+       {
+        return;
+       }
+        _customers.InsertOneAsync(temp);
+        _logger.LogInformation("Data indsat");
 
-
+    }
+    public bool CheckCredentials(string email, string password)
+    {
+        var filter = Builders<Customer>.Filter.Eq(c=> c.Email, email) & Builders<Customer>.Filter.Eq(c=>c.AccessCode, password);
+        Customer? temp = _customers.Find(filter).First();
+        if (temp == null)
+        {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 }
 }
