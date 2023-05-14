@@ -49,22 +49,6 @@ namespace CustomerService.Models
         [Newtonsoft.Json.JsonProperty("accessCode")]
         public string AccessCode { get; set; }
 
-        /*public Customer(ObjectId id, string firstName, string lastName, string gender, DateTime birthDate, string address, string postalCode, string city, string country, string telephone, string email, string accessCode)
-        {
-            this.Id = id;
-            this.FirstName = firstName;
-            this.LastName = lastName;
-            this.Gender = gender;
-            this.BirthDate = birthDate;
-            this.Address = address;
-            this.PostalCode = postalCode;
-            this.City = city;
-            this.Country = country;
-            this.Telephone = telephone;
-            this.Email = email;
-            this.AccessCode = accessCode;
-        }*/
-        //uden ID
         [JsonConstructor]
         public Customer(string firstName, string lastName, string gender, DateTime birthDate, string address, string postalCode, string city, string country, string telephone, string email, string accessCode)
         {
