@@ -24,73 +24,156 @@ public class CustomerController : ControllerBase
     }
 
     [HttpGet("getall")]
-    public IEnumerable<Customer> GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        _logger.LogInformation("'getall'-call recieved in controller");
-        return dBService.GetAllCustomers();
+        try
+        {
+            var response = await dBService.GetAllCustomers();
+            return Ok(response);
+        }
+        catch (ItemsNotFoundException ex)
+        {
+            return NotFound(new { error = ex.Message });
+        }
+         catch (Exception ex)
+        {
+            
+            return StatusCode(500, new { error = "An unexpected error occurred." + ex.Message });
+        }
+        
     }
 
 
     [HttpGet("getbyid/{id}")]
-    public Customer GetById([FromRoute]string id)
+    public async Task<IActionResult> GetById([FromRoute]string id)
     {
-        ObjectId oi = new ObjectId("" + id);
-        _logger.LogInformation("Call recieved, the converted oi is:" + oi.ToString);
-        return dBService.GetCustomerById(id);
+         try
+        {
+            var response = await dBService.GetCustomerById(id);
+            return Ok(response);
+        }
+        catch (ItemsNotFoundException ex)
+        {
+            return NotFound(new { error = ex.Message });
+        }
+         catch (Exception ex)
+        {
+            
+            return StatusCode(500, new { error = "An unexpected error occurred." + ex.Message });
+        }
+        
     }
 
 
     [HttpGet("getbyemail/{email}")]
-    public Customer GetByEmail([FromRoute]string email)
+    public async Task<IActionResult> GetByEmail([FromRoute]string email)
     {
-        _logger.LogInformation("Call recieved, the email is " + email);
-        return dBService.GetCustomerByEmail(email);
+         try
+        {
+            var response = await dBService.GetCustomerByEmail(email);
+            return Ok(response);
+        }
+        catch (ItemsNotFoundException ex)
+        {
+            return NotFound(new { error = ex.Message });
+        }
+         catch (Exception ex)
+        {
+            
+            return StatusCode(500, new { error = "An unexpected error occurred." + ex.Message });
+        }
+        
     }
 
 
     [HttpDelete("deletebyid/{id}")]
-    public Customer DeleteById([FromRoute]string id)
+    public async Task<IActionResult> DeleteById([FromRoute]string id)
     {
-        ObjectId oi = new ObjectId("" + id);
-        _logger.LogInformation("Call recieved, the converted oi is:" + oi.ToString);
-        return dBService.DeleteById(id);
+          try
+        {
+            var response = await dBService.DeleteById(id);
+            return Ok(response);
+        }
+        catch (ItemsNotFoundException ex)
+        {
+            return NotFound(new { error = ex.Message });
+        }
+         catch (Exception ex)
+        {
+            
+            return StatusCode(500, new { error = "An unexpected error occurred." + ex.Message });
+        }
+        
     }
 
 
     [HttpDelete("deletebyemail/{email}")]
-    public Customer DeleteByEmail([FromRoute] string email)
+    public async Task<IActionResult> DeleteByEmail([FromRoute] string email)
     {
-        _logger.LogInformation("Call recieved, the email is " + email);
-        return dBService.DeleteByEmail(email);
+          try
+        {
+            var response = await dBService.DeleteByEmail(email);
+            return Ok(response);
+        }
+        catch (ItemsNotFoundException ex)
+        {
+            return NotFound(new { error = ex.Message });
+        }
+         catch (Exception ex)
+        {
+            
+            return StatusCode(500, new { error = "An unexpected error occurred." + ex.Message });
+        }
+        
     }
 
 
     [HttpPut("updatecustomer")]
-    public Customer UdpdateCustomer([FromBody]Customer data)
+    public async Task<IActionResult> UdpdateCustomer([FromBody]Customer data)
     {
-        _logger.LogInformation("Call revieved, the firstname om the customer is:" + data.FirstName);
-        return dBService.UpdateCustomer(data);
+           try
+        {
+            var response = await dBService.UpdateCustomer(data);
+            return Ok(response);
+        }
+        catch (ItemsNotFoundException ex)
+        {
+            return NotFound(new { error = ex.Message });
+        }
+         catch (Exception ex)
+        {
+            
+            return StatusCode(500, new { error = "An unexpected error occurred." + ex.Message });
+        }
+        
     }
 
 
     [HttpPost("createcustomer")]
-    public async Task<Customer> CreateCustomer([FromBody] Customer data)
+    public async Task<IActionResult> CreateCustomer([FromBody] Customer data)
     {
-        _logger.LogInformation("Call revieved, " + data.ToString());
-        if(!dBService.CheckIfExists(data.Email))
+           try
         {
-            return await dBService.CreateCustomer(data);
+            var response = await dBService.CreateCustomer(data);
+            return Ok(response);
         }
-        else{
-            return data;
+        catch (ItemsNotFoundException ex)
+        {
+            return NotFound(new { error = ex.Message });
         }
+         catch (Exception ex)
+        {
+            
+            return StatusCode(500, new { error = "An unexpected error occurred." + ex.Message });
+        }
+            
+     
         //dBService.CreateCustomer(data.FirstName, data.LastName, data.Gender, data.BirthDate, data.Address, data.PostalCode, data.City, data.Country, data.Telephone, data.Email, data.AccessCode);
         
     }
      [HttpGet("checkcredentials")]
     public bool CheckCredentials([FromBody]Credentials data)
     {
-        _logger.LogInformation("Call recieved, the email is " + data.Email);
         return dBService.CheckCredentials(data.Email, data.AccessCode);
     }
 
