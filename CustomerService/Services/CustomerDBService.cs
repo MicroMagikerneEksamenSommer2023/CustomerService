@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System.Text.RegularExpressions;
 
 namespace CustomerService.Services
 { 
@@ -82,6 +83,10 @@ namespace CustomerService.Services
         if(alreadyExisting){
             throw new Exception("There is already a customer with this email: " + data.Email);
         }
+        if(!IsEmail(data.Email) || data.BirthDate > DateTime.Now.AddYears(-18))
+        {
+            throw new Exception("Email or Age ar not allowed");
+        }
         string lowerEmail = data.Email.ToLower();
         var filter = Builders<Customer>.Filter.Eq(c => c.Id, data.Id);
         var update = Builders<Customer>.Update.Set(c => c.FirstName, data.FirstName).Set(c => c.LastName, data.LastName).Set(c => c.Gender, data.Gender).Set(c => c.BirthDate, data.BirthDate).Set(c => c.Address, data.Address).Set(c => c.PostalCode, data.PostalCode).Set(c => c.City, data.City).Set(c => c.Country, data.Country).Set(c => c.Telephone, data.Telephone).Set(c => c.Email, lowerEmail).Set(c => c.AccessCode, data.AccessCode);
@@ -102,6 +107,10 @@ namespace CustomerService.Services
         Customer temp = data;
         temp.Id = null;
         temp.Email = temp.Email.ToLower();
+        if(!IsEmail(temp.Email) || temp.BirthDate > DateTime.Now.AddYears(-18))
+        {
+            throw new Exception("Email or Age ar not allowed");
+        }
         try
         {
             await _customers.InsertOneAsync(temp);
@@ -142,6 +151,17 @@ namespace CustomerService.Services
         else {
             return true;
         }
+    }
+    static bool IsEmail(string input)
+    {
+        // Regular expression pattern for email validation
+        string pattern = @"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$";
+
+        // Create a Regex object with the pattern
+        Regex regex = new Regex(pattern);
+
+        // Use the Regex.IsMatch() method to check if the input matches the pattern
+        return regex.IsMatch(input);
     }
 }
 }
