@@ -174,7 +174,16 @@ public class CustomerController : ControllerBase
      [HttpGet("checkcredentials")]
     public bool CheckCredentials([FromBody]Credentials data)
     {
-        return dBService.CheckCredentials(data.Email, data.AccessCode);
+        try{
+            bool result = dBService.CheckCredentials(data.Email, data.AccessCode);
+            return result;
+        }
+        catch(ItemsNotFoundException ex)
+        {
+            _logger.LogInformation("no match in the database");
+            return false;
+        }
+        
     }
 
 

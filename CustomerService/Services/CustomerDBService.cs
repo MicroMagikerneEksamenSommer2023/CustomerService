@@ -146,7 +146,8 @@ namespace CustomerService.Services
         var temp = _customers.Find(filter).FirstOrDefault();
         if (temp == null)
         {
-            return false;
+
+            throw new ItemsNotFoundException("No customer matched the email and password");
         }
         else {
             return true;
