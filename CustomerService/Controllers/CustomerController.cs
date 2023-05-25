@@ -155,7 +155,7 @@ public class CustomerController : ControllerBase
            try
         {
             var response = await dBService.CreateCustomer(data);
-            return Ok(response);
+            return Ok("You have succesfully created a customer!");
         }
         catch (ItemsNotFoundException ex)
         {
