@@ -29,7 +29,7 @@ public class PublicController : ControllerBase
            try
         {
             var response = await dBService.CreateCustomer(data);
-            return Ok(response);
+            return Ok("Customer created succesfully");
         }
         catch (ItemsNotFoundException ex)
         {
