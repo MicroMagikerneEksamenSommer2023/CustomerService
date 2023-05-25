@@ -171,7 +171,7 @@ public class CustomerController : ControllerBase
         //dBService.CreateCustomer(data.FirstName, data.LastName, data.Gender, data.BirthDate, data.Address, data.PostalCode, data.City, data.Country, data.Telephone, data.Email, data.AccessCode);
         
     }
-     [HttpGet("checkcredentials")]
+     [HttpPost("checkcredentials")]
     public bool CheckCredentials([FromBody]Credentials data)
     {
         try{
