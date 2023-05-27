@@ -14,10 +14,9 @@ public class CustomerController : ControllerBase
 
 
     private readonly ILogger<CustomerController> _logger;
+    private readonly ICustomerDBService dBService;
 
-    private readonly CustomerDBService dBService;
-
-    public CustomerController(ILogger<CustomerController> logger, CustomerDBService service)
+    public CustomerController(ILogger<CustomerController> logger, IConfiguration configuration, ICustomerDBService service)
     {
         _logger = logger;
         dBService = service;

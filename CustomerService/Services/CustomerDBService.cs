@@ -8,7 +8,20 @@ using System.Text.RegularExpressions;
 
 namespace CustomerService.Services
 { 
-    public class CustomerDBService
+    public interface ICustomerDBService
+    {
+        Task<List<Customer>> GetAllCustomers();
+        Task<Customer> GetCustomerById(string id);
+        Task<Customer> GetCustomerByEmail(string email);
+        Task<Customer> DeleteById(string id);
+        Task<Customer> DeleteByEmail(string email);
+        Task<Customer> UpdateCustomer(Customer data);
+        Task<bool> CreateCustomer(Customer data);
+        bool CheckIfExists(string email);
+        bool CheckCredentials(string email, string password);
+        
+    }
+    public class CustomerDBService : ICustomerDBService
 {
     private readonly ILogger<CustomerDBService> _logger;
 
