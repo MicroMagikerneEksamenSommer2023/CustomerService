@@ -36,7 +36,7 @@ public class Tests
     public async Task CreateCustomerTest_Succes()
     {
         //Arrange
-        var customer = CreateCustomer("mail@mail.dk");
+        var customer = CreateCustomer("mail@mail.dk", new DateTime(1999, 02, 02));
         bool customerTrue = true;
 
         var stubService = new Mock<ICustomerDBService>();
@@ -53,20 +53,18 @@ public class Tests
         Assert.That(result, Is.TypeOf<OkObjectResult>()); 
     }
 
-
-/*
-CreateCustomer i CustomerDBService returner aldrig en false
+/* KAN IKKE FÅ TIL AT VIRKE - SKAL KIGGES PÅ!
      [Test]
     public async Task CreateCustomerTest_NotFound()
     {
         //Arrange
-        var customer = CreateCustomer("mail@mail.dk");
+        var customer = CreateCustomer("mail@mail.dk", new DateTime(2020, 02, 02));
         bool customerFalse = false;
 
         var stubService = new Mock<ICustomerDBService>();
 
         stubService.Setup(svc => svc.CreateCustomer(customer))
-            .Returns(Task.FromResult<bool>(customerFalse));
+            .ThrowsAsync(new Exception("Email or Age ar not allowed"));
 
         var controller = new CustomerController(_logger,_configuration, stubService.Object);
 
@@ -74,18 +72,17 @@ CreateCustomer i CustomerDBService returner aldrig en false
         var result = await controller.CreateCustomer(customer);
 
         //Assert
-        Assert.That(result, Is.TypeOf<NotFoundObjectResult>()); 
+        Assert.That(result, Is.TypeOf<Exception>()); 
     }
-
 */
      /// <summary>
     /// Helper method for creating Customer instance.
     /// </summary>
     /// <returns></returns>
-    private Customer CreateCustomer(string email)
+    private Customer CreateCustomer(string email, DateTime dateTime)
     {
         var customer = new Customer("Test Firstname", "Test LastName", "Test Gender", 
-                                    new DateTime(1999, 09, 20), "Test Address", "Test PostalCode", 
+                                    dateTime, "Test Address", "Test PostalCode", 
                                     "Test City", "Test Country", "Test Telephone", email, "Test AccessCode");
         
         return customer; 
