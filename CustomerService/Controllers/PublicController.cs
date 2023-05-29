@@ -11,12 +11,11 @@ namespace CustomerService.Controllers;
 [Route("customerservice/public/v1")]
 public class PublicController : ControllerBase
 {
-
-
+    // Attributter
     private readonly ILogger<PublicController> _logger;
-
     private readonly ICustomerDBService dBService;
 
+    // Constructor
     public PublicController(ILogger<PublicController> logger, ICustomerDBService service)
     {
         _logger = logger;
@@ -26,7 +25,7 @@ public class PublicController : ControllerBase
     [HttpPost("createcustomer")]
     public async Task<IActionResult> CreateCustomer([FromBody] Customer data)
     {
-           try
+        try
         {
             var response = await dBService.CreateCustomer(data);
             return Ok("Customer created succesfully");
@@ -35,7 +34,7 @@ public class PublicController : ControllerBase
         {
             return NotFound(new { error = ex.Message });
         }
-         catch (Exception ex)
+        catch (Exception ex)
         {
             
             return StatusCode(500, new { error = "An unexpected error occurred." + ex.Message });

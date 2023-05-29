@@ -11,17 +11,18 @@ namespace CustomerService.Controllers;
 [Route("customerservice/v1")]
 public class CustomerController : ControllerBase
 {
-
-
+    // Attributter
     private readonly ILogger<CustomerController> _logger;
     private readonly ICustomerDBService dBService;
 
+    // Constructor
     public CustomerController(ILogger<CustomerController> logger, IConfiguration configuration, ICustomerDBService service)
     {
         _logger = logger;
         dBService = service;
     }
 
+    // Henter alle kunder fra databasen
     [HttpGet("getall")]
     public async Task<IActionResult> GetAll()
     {
@@ -34,19 +35,18 @@ public class CustomerController : ControllerBase
         {
             return NotFound(new { error = ex.Message });
         }
-         catch (Exception ex)
+        catch (Exception ex)
         {
-            
+
             return StatusCode(500, new { error = "An unexpected error occurred." + ex.Message });
         }
-        
     }
 
-
+    // Henter en kunde fra databasen baseret på id
     [HttpGet("getbyid/{id}")]
-    public async Task<IActionResult> GetById([FromRoute]string id)
+    public async Task<IActionResult> GetById([FromRoute] string id)
     {
-         try
+        try
         {
             var response = await dBService.GetCustomerById(id);
             return Ok(response);
@@ -55,19 +55,17 @@ public class CustomerController : ControllerBase
         {
             return NotFound(new { error = ex.Message });
         }
-         catch (Exception ex)
+        catch (Exception ex)
         {
-            
             return StatusCode(500, new { error = "An unexpected error occurred." + ex.Message });
         }
-        
     }
 
-
+    // Henter en kunde fra databasen baseret på e-mail
     [HttpGet("getbyemail/{email}")]
-    public async Task<IActionResult> GetByEmail([FromRoute]string email)
+    public async Task<IActionResult> GetByEmail([FromRoute] string email)
     {
-         try
+        try
         {
             var response = await dBService.GetCustomerByEmail(email);
             return Ok(response);
@@ -76,19 +74,17 @@ public class CustomerController : ControllerBase
         {
             return NotFound(new { error = ex.Message });
         }
-         catch (Exception ex)
+        catch (Exception ex)
         {
-            
             return StatusCode(500, new { error = "An unexpected error occurred." + ex.Message });
         }
-        
     }
 
-
+    // Sletter en kunde fra databasen baseret på id
     [HttpDelete("deletebyid/{id}")]
-    public async Task<IActionResult> DeleteById([FromRoute]string id)
+    public async Task<IActionResult> DeleteById([FromRoute] string id)
     {
-          try
+        try
         {
             var response = await dBService.DeleteById(id);
             return Ok(response);
@@ -97,19 +93,17 @@ public class CustomerController : ControllerBase
         {
             return NotFound(new { error = ex.Message });
         }
-         catch (Exception ex)
+        catch (Exception ex)
         {
-            
             return StatusCode(500, new { error = "An unexpected error occurred." + ex.Message });
         }
-        
     }
 
-
+    // Sletter en kunde fra databasen baseret på e-mail
     [HttpDelete("deletebyemail/{email}")]
     public async Task<IActionResult> DeleteByEmail([FromRoute] string email)
     {
-          try
+        try
         {
             var response = await dBService.DeleteByEmail(email);
             return Ok(response);
@@ -118,19 +112,17 @@ public class CustomerController : ControllerBase
         {
             return NotFound(new { error = ex.Message });
         }
-         catch (Exception ex)
+        catch (Exception ex)
         {
-            
             return StatusCode(500, new { error = "An unexpected error occurred." + ex.Message });
         }
-        
     }
 
-
+    // Opdaterer en kunde i databasen
     [HttpPut("updatecustomer")]
-    public async Task<IActionResult> UdpdateCustomer([FromBody]Customer data)
+    public async Task<IActionResult> UpdateCustomer([FromBody] Customer data)
     {
-           try
+        try
         {
             var response = await dBService.UpdateCustomer(data);
             return Ok(response);
@@ -139,19 +131,17 @@ public class CustomerController : ControllerBase
         {
             return NotFound(new { error = ex.Message });
         }
-         catch (Exception ex)
+        catch (Exception ex)
         {
-            
             return StatusCode(500, new { error = "An unexpected error occurred." + ex.Message });
         }
-        
     }
 
-
+    // Opretter en kunde i databsen
     [HttpPost("createcustomer")]
     public async Task<IActionResult> CreateCustomer([FromBody] Customer data)
     {
-           try
+        try
         {
             var response = await dBService.CreateCustomer(data);
             return Ok("You have succesfully created a customer!");
@@ -160,32 +150,30 @@ public class CustomerController : ControllerBase
         {
             return NotFound(new { error = ex.Message });
         }
-         catch (Exception ex)
+        catch (Exception ex)
         {
-            
             return StatusCode(500, new { error = "An unexpected error occurred." + ex.Message });
         }
-            
-     
         //dBService.CreateCustomer(data.FirstName, data.LastName, data.Gender, data.BirthDate, data.Address, data.PostalCode, data.City, data.Country, data.Telephone, data.Email, data.AccessCode);
-        
     }
-     [HttpPost("checkcredentials")]
-    public bool CheckCredentials([FromBody]Credentials data)
+
+    // Tjekker kundeoplysningerne mod databasen
+    [HttpPost("checkcredentials")]
+    public bool CheckCredentials([FromBody] Credentials data)
     {
-        try{
+        try
+        {
             bool result = dBService.CheckCredentials(data.Email, data.AccessCode);
             return result;
         }
-        catch(ItemsNotFoundException ex)
+        catch (ItemsNotFoundException ex)
         {
             _logger.LogInformation("no match in the database");
             return false;
         }
-        
     }
 
-
+    // Henter version
     [HttpGet("version")]
     public IEnumerable<string> GetVersion()
     {
