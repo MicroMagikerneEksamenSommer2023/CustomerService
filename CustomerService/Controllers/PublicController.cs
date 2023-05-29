@@ -13,11 +13,11 @@ public class PublicController : ControllerBase
 {
 
 
-    private readonly ILogger<CustomerController> _logger;
+    private readonly ILogger<PublicController> _logger;
 
     private readonly ICustomerDBService dBService;
 
-    public PublicController(ILogger<CustomerController> logger, ICustomerDBService service)
+    public PublicController(ILogger<PublicController> logger, ICustomerDBService service)
     {
         _logger = logger;
         dBService = service;
